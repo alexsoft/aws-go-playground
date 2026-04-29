@@ -34,9 +34,11 @@ func healthcheck(w http.ResponseWriter, req *http.Request) {
 }
 
 func getAppServer() string {
-	server := os.Getenv("APP_SERVER")
-	if server == "" {
-		server = "NA"
+	if server := os.Getenv("APP_SERVER"); server != "" {
+		return server
 	}
-	return server
+	if hostname, err := os.Hostname(); err == nil {
+		return hostname
+	}
+	return "NA"
 }
